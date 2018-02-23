@@ -1,0 +1,22 @@
+{
+  "name": "fenix",
+  "version": "1.0.0",
+  "description": "START Hack project",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/carlfriess/fenix.git"
+  },
+  "author": "Carl Friess, Sven Knobloch, Laurin Paech, Sebastian Winberg",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/carlfriess/fenix/issues"
+  },
+  "homepage": "https://github.com/carlfriess/fenix#readme",
+  "dependencies": {
+    "rpio": "^0.9.20"
+  }
+}
