@@ -54,10 +54,10 @@ function init(config, ioInst) {
 
     io = ioInst;
 
-    distFront = io.ultrasonic.front();
-    distBack = io.ultrasonic.back();
-    distLeft = io.ultrasonic.left();
-    distRight = io.ultrasonic.right();
+    distFront = io.ultrasonic.front;
+    distBack = io.ultrasonic.back;
+    distLeft = io.ultrasonic.left;
+    distRight = io.ultrasonic.right;
 
     tent1Length = Math.abs(distFront + distBack);
     tent1Width = Math.abs(distLeft + distRight);
@@ -155,7 +155,7 @@ function centerTent1() {
         // the bigger the correction the higher the pitch (higher closer to wall)
     pitch = 0.5 + correction/(tent1/2)*(maxPitch - 0.5);
     pitch = Math.max(pitch, minPitch);
-    pitch = Math.min(pitch, maxPitch;
+    pitch = Math.min(pitch, maxPitch);
     console.log("Pitch:", pitch);
     io.flightcontrol.pitch(pitch);
 
@@ -179,14 +179,14 @@ function centerTent1() {
     // Yaw 0.5-1 Maximum Nose Right Rotation
     distRight = io.ultrasonic.right;
     console.log("Distance Right:", distRight);
-    let correction = ctrRightCT1.update(distRight);
+    correction = ctrRightCT1.update(distRight);
 
     // Yaw 0-0.5 Maximum Nose Left Rotation
     // Yaw 0.5-1 Maximum Nose Right Rotation
 
     yaw = 0.5 - correction/(tent1/2)*(maxYaw - 0.5);
     yaw = Math.max(yaw, minYaw);
-    yaw = Math.min(yaw, maxYaw;
+    yaw = Math.min(yaw, maxYaw);
     console.log("yaw:", yaw);
     io.flightcontrol.yaw(yaw);
 
@@ -261,9 +261,9 @@ function centerTent2() {
 
     // TODO: Mindestabstand von Front und Back auf 20cm machen, damit man durch die Tür kommt
 
-    if () {
-        isCenterT1 = true;
-    }
+    //if () {
+    //    isCenterT1 = true;
+    //}
 }
 
 let engineDecided = false;
