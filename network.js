@@ -1,9 +1,11 @@
 let net = require('net');
 let fs = require('fs');
-let config = require('./config.json');
 
 let socket;
-function initializeNetwork() {
+let config;
+
+function initializeNetwork(conf) {
+    config = conf;
     socket = net.createConnection({
         port: config.network.protocol_port,
         host: config.network.ip_address
@@ -28,11 +30,12 @@ function sendUltrasonicData(forward, right, backward, left, down) {
 }
 
 function sendImageData() {
-    fs.readFile(`${__dirname}/pic.jpg`).then((err, data) => {
-        let buffer = Buffer.alloc(data.length + 1);
+    fs.readFile(`${__dirname}/pic.jpg`, (err, data) => {
+        let buffer = Buffer.alloc(5);
         buffer.writeUInt8(config.network.protocol.image, 0);
-        buffer.write(data, 1);
-        socket.write(buffer);
+        buffer.writeUInt32LE(data.length, 1);
+        console.log("Sending ", data.length, " bytes!");
+        socket.write(Buffer.concat([buffer, data]));
     });
 }
 
