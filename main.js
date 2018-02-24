@@ -36,7 +36,6 @@ var tend = 0;
 
 var saw_green = false;
 var capture_in_progress = false;
-var capture_finished = false;
 var saw_red = false;
 var current_gen = 0;
 
@@ -89,23 +88,20 @@ setTimeout(function () {
                 break;
 
             case states.CAPTURE:
-                if (capture_finished) {
-                    capture_in_progress = false;
-                    capture_finished = false;
-                    current_gen++;
-                    current_state = states.ROTATE;
-                    console.log("\n\n\n!!! Rotating !!!\n\n");
-                }
-                else if (!capture_in_progress) {
+                if (!capture_in_progress) {
                     capture_in_progress = true;
                     capture(true).then(color => {
-                        if (color ==  RED) {
+                        if (color == RED) {
                             saw_red = true;
-                            capture_finished = true;
+                            capture_in_progress = false;
+                            current_gen++;
                             network.sendGeneratorData(current_gen);
+                            console.log("\n\n\n!!! Rotating !!!\n\n");
+                            current_state = states.ROTATE;
                         }
                     });
                 }
+
                 break;
 
             case states.ROTATE:
