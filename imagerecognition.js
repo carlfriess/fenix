@@ -1,4 +1,7 @@
 var Jimp = require("jimp");
+var ColorThief = require("color-thief");
+
+var colorThief = new ColorThief();
 
 // Constants for color
 const UNKNOWN = 0;
@@ -9,8 +12,10 @@ const GREEN = 2;
 const backgroundThreshhold = 110;
 const ratioThreshhold = 0.075;
 
+var imageName = './img/1519450180174.jpg';
 
-Jimp.read("./img/green3.jpg").then(function (image) {
+/*
+jimp.read("./img/1519449993135.jpg").then(function (image) {
     
     // Getting single color decision from the image
     var answer = getSingleColor(image);
@@ -25,7 +30,11 @@ Jimp.read("./img/green3.jpg").then(function (image) {
     console.error(err);
 
 });
+*/
 
+var answer = colorRecognitionColorThief(imageName);
+
+console.log((answer == RED) ? "RED!" : ((answer == GREEN) ? "GREEN!" : "UNKNOWN"));
 
 function getSingleColor(image) {
 
@@ -50,6 +59,96 @@ function getThreeColors(image) {
 
     // Returning array with answers
     return [answer1, answer2, answer3];
+
+}
+
+function colorRecognitionColorThief(imageName) {
+
+    var palette = colorThief.getPalette(imageName);
+
+    var colorDecisions = palette.map((rgbColor) => {
+        
+        var hsvColor = rgbToHsv(rgbColor[0], rgbColor[1], rgbColor[2]);
+
+        var h = hsvColor[0];
+        var s = hsvColor[1];
+        var v = hsvColor[2];
+
+        if (isRed(h, s, v)) {
+            return RED;
+        } else if (isGreen(h, s, v)) {
+            return GREEN;
+        } else {
+            return UNKNOWN;
+        }
+
+    });
+
+    var redCount = 0;
+    var greenCount = 0;
+    var unknownCount = 0;
+    
+    for (i = 0; i < palette.length; i++) { 
+        
+        var impact = palette.length - i;
+        
+        if (palette[i] == RED) {
+            redCount += i * impact;
+        } else if (palette[i] == GREEN) {
+            greenCount += i * impact;
+        } else {
+            unknownCount += 1;
+        }
+
+    }
+
+    if (redCount >= greenCount * 1.5) {
+        console.log("RED");
+        return RED;
+    } else if (greenCount >= redCount * 1.5) {
+        console.log("GREEN");
+        return GREEN;
+    } else {
+        console.log("UNKNOWN");
+        return UNKNOWN;
+    }
+
+}
+
+function isRed(h, s, v) {
+    return (340 <= h || h <= 10 && v >= 0.3);
+}
+
+function isGreen(h, s, v) {
+    return (85 <= h && h <= 160 && v >= 0.3);
+}
+
+function mod(n, m) {
+    return ((n % m) + m) % m;
+}
+
+function rgbToHsv(r, g, b) {
+  
+    r /= 255, g /= 255, b /= 255;
+
+    var Cmax = Math.max(r, g, b);
+    var Cmin = Math.min(r, g, b);
+    var h, s, v = Cmax;
+
+    var d = Cmax - Cmin;
+    s = (Cmax == 0) ? 0 : (d / Cmax);
+
+    if (Cmax == Cmin) {
+        h = 0; // achromatic
+    } else {
+        switch (Cmax) {
+            case r: h = mod(Math.floor(60 * (g - b) / d), 360); break;
+            case g: h = mod(Math.floor(60 * (b - r) / d + 120), 360); break;
+            case b: h = mod(Math.floor(60 * (r - g) / d + 240), 360); break;
+        }
+    }
+
+    return [ h, s, v ];
 
 }
 
