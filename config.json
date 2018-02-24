@@ -21,6 +21,12 @@
                 "trigger": 11,
                 "echo": 12
             }
+        },
+        "fc": {
+            "throttle": 0,
+            "roll": 0,
+            "pitch": 0,
+            "yaw": 0
         }
     },
     "network": {
