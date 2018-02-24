@@ -1,9 +1,6 @@
 {
-
     "pins": {
-
         "us": {
-
             "front": {
                 "trigger": 11,
                 "echo": 12
@@ -24,9 +21,16 @@
                 "trigger": 11,
                 "echo": 12
             }
-
         }
-
+    },
+    "network": {
+        "ip_address": "130.82.238.44",
+        "log_port": 3000,
+        "protocol_port": 3001
+        "protocol": {
+            "generator": 0,
+            "ultrasonic": 1,
+            "image": 2
+        }
     }
-
 }
