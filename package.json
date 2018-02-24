@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node main.js",
-    "pi": "rsync -azP --exclude=node_modules ./ pi@130.82.239.128:~/fenix && ssh pi@130.82.239.128 'cd ~/fenix ; killall node ; npm start'"
+    "pi": "rsync -azP --exclude=node_modules --exclude=.git ./ pi@130.82.239.128:~/fenix && ssh pi@130.82.239.128 'cd ~/fenix ; killall node ; npm start'"
   },
   "repository": {
     "type": "git",
