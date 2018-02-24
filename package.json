@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node main.js",
-    "pi": "rsync -azP --exclude=node_modules --exclude=.git ./ pi@130.82.239.128:~/fenix && ssh pi@130.82.239.128 'cd ~/fenix ; killall node ; npm start'"
+    "pi": "rsync -azP --exclude=node_modules --exclude=.git ./ pi@130.82.239.128:~/fenix && ssh pi@130.82.239.128 'cd ~/fenix ; sudo killall node ; sudo npm start'"
   },
   "repository": {
     "type": "git",
@@ -19,8 +19,7 @@
   },
   "homepage": "https://github.com/carlfriess/fenix#readme",
   "dependencies": {
-    "microtime": "^2.1.7",
-    "pi-camera": "^1.0.1",
-    "rpio": "^0.9.20"
+    "pigpio": "^0.6.4",
+    "pi-camera": "^1.0.1"
   }
 }
