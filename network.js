@@ -11,6 +11,10 @@ function initializeNetwork(conf) {
         host: config.network.ip_address
     });
 
+    socket.on('data', data => {
+        // Emergency Stop - Shut down throttle
+    });
+
     socket.on('close', () => {
         console.log("Socket Closed!");
         initializeNetwork(conf);
