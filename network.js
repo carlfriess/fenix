@@ -1,4 +1,5 @@
 let net = require('net');
+let fs = require('fs');
 let config = require('./config.json');
 
 let socket;
@@ -26,13 +27,14 @@ function sendUltrasonicData(forward, right, backward, left, down) {
     socket.write(buffer);
 }
 
-function sendImageData(array) {
-    let buffer = Buffer.alloc(array.size + 1);
-    buffer.writeUInt8(config.network.protocol.image, 0);
-    buffer.write(array, 1);
-    socket.write(buffer);
+function sendImageData() {
+    fs.readFile(`${__dirname}/pic.jpg`).then((err, data) => {
+        let buffer = Buffer.alloc(data.length + 1);
+        buffer.writeUInt8(config.network.protocol.image, 0);
+        buffer.write(data, 1);
+        socket.write(buffer);
+    });
 }
-
 
 module.exports = {
     initializeNetwork: initializeNetwork,
