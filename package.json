@@ -20,6 +20,7 @@
   "homepage": "https://github.com/carlfriess/fenix#readme",
   "dependencies": {
     "microtime": "^2.1.7",
+    "pi-camera": "^1.0.1",
     "rpio": "^0.9.20"
   }
 }
