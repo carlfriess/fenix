@@ -94,7 +94,7 @@ function init(config) {
 function writePWM(pin) {
 
     return function (val) {
-        pin.servoWrite((val * 2000 + 500).toFixed(0));
+        pin.servoWrite((val * 1000 + 1000).toFixed(0));
     }
 
 }
