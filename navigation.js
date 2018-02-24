@@ -94,7 +94,7 @@ function throttleAdjuster(correction) {
     var throttle = hoverThrottle + correction / targetHeight * ((correction > 0) ?  1 - hoverThrottle : hoverThrottle );
     throttle = Math.max(throttle, 0);
     throttle = Math.min(throttle, 1);
-    console.log("Throttle", throttle);
+    console.log("Throttle:", throttle);
     io.flightcontrol.throttle(throttle);
 }
 

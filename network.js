@@ -15,7 +15,8 @@ function initializeNetwork(conf, ioInst) {
 
     socket.on('data', data => {
         // Emergency Stop - Shut down throttle
-        console.log("SAD");
+        console.log("\n\n\n\n\n!!!!! EMERGENCY STOP !!!!!\n\n\n\n");
+        io.flightcontrol.throttle(0);
         io.flightcontrol.arm(0);
         process.abort();
     });

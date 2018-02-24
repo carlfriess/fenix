@@ -7,6 +7,7 @@ let config = require('./config.json');
 
 // Initialization
 io.init(config);
+io.flightcontrol.throttle(0);
 network.initializeNetwork(config, io);
 navigation.init(config, io);
 
