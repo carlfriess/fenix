@@ -17,31 +17,22 @@ var bottom = 0;
 var tstart = 0;
 var tend = 0;
 
-function control() {
+setTimeout(function() {
+    setInterval(function control() {
 
-    tstart = (new Date()).getTime();
+        tstart = (new Date()).getTime();
 
-    // Read all sensors
-    front = io.readUltrasonic(config.pins.us.front) || front;
-    back = io.readUltrasonic(config.pins.us.back) || back;
-    left = io.readUltrasonic(config.pins.us.left) || left;
-    right = io.readUltrasonic(config.pins.us.right) || right;
-    bottom = io.readUltrasonic(config.pins.us.bottom) || bottom;
+        // Send telemetry data
+        network.sendUltrasonicData(io.ultrasonic.front,io.ultrasonic.right,io.ultrasonic.back,io.ultrasonic.left,io.ultrasonic.bottom);
 
-    // Send telemetry data
-    network.sendUltrasonicData(front,right,back,left,bottom);
+        // Control....
 
-    // Control....
+        // Log loop duration
+        console.log("Loop duration: ", (new Date()).getTime() - tstart, "ms after ", tstart - tend, "ms");
+        tend = (new Date()).getTime();
 
-    // Log loop duration
-    console.log("Loop duration: ", (new Date()).getTime() - tstart, "ms after ", tstart - tend, "ms");
-    tend = (new Date()).getTime();
-
-    // Repeat the loop
-    setTimeout(control, 60);
-
-}
-control();
+    }, 60);
+}, 1000);
 
 function takePic() {
     io.camera.snap().then(() => {

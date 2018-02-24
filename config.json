@@ -2,31 +2,32 @@
     "pins": {
         "us": {
             "front": {
-                "trigger": 11,
-                "echo": 12
+                "trigger": 17,
+                "echo": 18
             },
             "back": {
-                "trigger": 11,
-                "echo": 12
+                "trigger": 5,
+                "echo": 6
             },
             "left": {
-                "trigger": 11,
-                "echo": 12
+                "trigger": 27,
+                "echo": 22
             },
             "right": {
-                "trigger": 11,
-                "echo": 12
+                "trigger": 23,
+                "echo": 24
             },
             "bottom": {
-                "trigger": 11,
-                "echo": 12
+                "trigger": 13,
+                "echo": 19
             }
         },
         "fc": {
-            "throttle": 0,
-            "roll": 0,
-            "pitch": 0,
-            "yaw": 0
+            "throttle": 25,
+            "roll": 8,
+            "pitch": 7,
+            "yaw": 1,
+            "arm": 0
         }
     },
     "network": {
