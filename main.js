@@ -17,7 +17,7 @@ var bottom = 0;
 var tstart = 0;
 var tend = 0;
 
-function control() {
+setInterval(function control() {
 
     tstart = (new Date()).getTime();
 
@@ -30,11 +30,7 @@ function control() {
     console.log("Loop duration: ", (new Date()).getTime() - tstart, "ms after ", tstart - tend, "ms");
     tend = (new Date()).getTime();
 
-    // Repeat the loop
-    setTimeout(control, 60);
-
-}
-control();
+}, 60);
 
 function takePic() {
     io.camera.snap().then(() => {

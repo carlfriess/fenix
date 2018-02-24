@@ -9,6 +9,8 @@ var triggerFront, echoFront,
     triggerLeft, echoLeft,
     triggerBottom, echoBottom;
 
+var yaw, pitch, roll, throttle, arm;
+
 // The number of microseconds it takes sound to travel 1cm at 20 degrees celcius
 var MICROSECDONDS_PER_CM = 1e6/34321;
 
@@ -85,27 +87,27 @@ function init(config) {
         triggerBottom.trigger(10, 1); // Set trigger high for 10 microseconds
     }, 60);
 
+    yaw = new Gpio(config.pins.fc.yaw, {mode: Gpio.OUTPUT});
+    pitch = new Gpio(config.pins.fc.pitch, {mode: Gpio.OUTPUT});
+    roll = new Gpio(config.pins.fc.roll, {mode: Gpio.OUTPUT});
+    throttle = new Gpio(config.pins.fc.throttle, {mode: Gpio.OUTPUT});
+    arm = new Gpio(config.pins.fc.arm, {mode: Gpio.OUTPUT});
 
-    /*rpio.open(config.pins.fc.throttle, rpio.PWM);
-    rpio.open(config.pins.fc.roll, rpio.PWM);
-    rpio.open(config.pins.fc.pitch, rpio.PWM);
-    rpio.open(config.pins.fc.yaw, rpio.PWM);
-
-    rpio.pwmSetClockDivider(clockdiv);
-
-    rpio.pwmSetRange(config.pins.fc.throttle, pwmRange);
-    rpio.pwmSetRange(config.pins.fc.roll, pwmRange);
-    rpio.pwmSetRange(config.pins.fc.pitch, pwmRange);
-    rpio.pwmSetRange(config.pins.fc.yaw, pwmRange);*/
-
+    module.exports.flightcontrol.yaw = writePWM(yaw);
+    module.exports.flightcontrol.pitch = writePWM(pitch);
+    module.exports.flightcontrol.roll = writePWM(roll);
+    module.exports.flightcontrol.trottle = writePWM(throttle);
+    module.exports.flightcontrol.arm = function (val) { arm.servoWrite(val * 2500); }
 
 }
 
-/*function writePWM(pin, value) {
+function writePWM(pin) {
 
-    rpio.pwmSetData(pin, value * pwmRange);
+    return function (val) {
+        pin.servoWrite(val * 2000 + 500);
+    }
 
-}*/
+}
 
 module.exports = {
     "init": init,
@@ -116,7 +118,7 @@ module.exports = {
         "right": 0,
         "bottom":0
     },
-    //"writePWM": writePWM,
+    "flightcontrol": {},
     "camera": new PiCamera({
         mode: 'photo',
         output: `${ __dirname }/pic.jpg`,

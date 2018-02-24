@@ -23,11 +23,11 @@
             }
         },
         "fc": {
-            "throttle": 22,
-            "roll": 24,
-            "pitch": 26,
-            "yaw": 28,
-            "arm": 27
+            "throttle": 25,
+            "roll": 8,
+            "pitch": 7,
+            "yaw": 1,
+            "arm": 0
         }
     },
     "network": {
