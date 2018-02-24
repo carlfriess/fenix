@@ -21,7 +21,7 @@ var distLeft = 0;
 
 // hover Throttle
 var hoverThrottle = 0.7;
-var targetHeight = 1.25;
+var targetHeight = 125;
 
 // Hover PID Controller
 var ctrHover;
@@ -47,6 +47,7 @@ function init(config, ioInst) {
 function hoverPID(){
 
     distBottom = io.ultrasonic.bottom;
+    console.log(distBottom);
     let correction  = ctrHover.update(distBottom);
     throttleAdjuster(correction);
 
@@ -90,7 +91,11 @@ function hoverPID(){
 
 // Adjust Throttle
 function throttleAdjuster(correction) {
-    io.flightcontrol.throttle(hoverThrottle + correction / targetHeight * ((correction > 0) ? hoverThrottle : 1 - hoverThrottle ));
+    var throttle = hoverThrottle + correction / targetHeight * ((correction > 0) ?  1 - hoverThrottle : hoverThrottle );
+    throttle = Math.max(throttle, 0);
+    throttle = Math.min(throttle, 1);
+    console.log("Throttle", throttle);
+    io.flightcontrol.throttle(throttle);
 }
 
 // Check in Idle in an Interval if signals START (Green) or NOT (Red)

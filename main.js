@@ -7,7 +7,7 @@ let config = require('./config.json');
 
 // Initialization
 io.init(config);
-network.initializeNetwork(config);
+network.initializeNetwork(config, io);
 navigation.init(config, io);
 
 
@@ -15,6 +15,7 @@ var tstart = 0;
 var tend = 0;
 
 setTimeout(function() {
+    io.flightcontrol.arm(1);
     setInterval(function control() {
 
         tstart = (new Date()).getTime();

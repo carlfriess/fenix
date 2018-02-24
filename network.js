@@ -3,9 +3,11 @@ let fs = require('fs');
 
 let socket;
 let config;
+let io;
 
-function initializeNetwork(conf) {
+function initializeNetwork(conf, ioInst) {
     config = conf;
+    io = ioInst;
     socket = net.createConnection({
         port: config.network.protocol_port,
         host: config.network.ip_address
@@ -13,6 +15,9 @@ function initializeNetwork(conf) {
 
     socket.on('data', data => {
         // Emergency Stop - Shut down throttle
+        console.log("SAD");
+        io.flightcontrol.arm(0);
+        process.abort();
     });
 
     socket.on('close', () => {

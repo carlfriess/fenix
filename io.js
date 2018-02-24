@@ -34,9 +34,6 @@ function initEcho(gpio, name) {
 
 function init(config) {
 
-    // DEBUG ONLY
-    config = require('./config.json');
-
     triggerFront = new Gpio(config.pins.us.front.trigger, {mode: Gpio.OUTPUT});
     echoFront = new Gpio(config.pins.us.front.echo, {mode: Gpio.INPUT, alert: true});
 
@@ -90,14 +87,14 @@ function init(config) {
     module.exports.flightcontrol.pitch = writePWM(pitch);
     module.exports.flightcontrol.roll = writePWM(roll);
     module.exports.flightcontrol.throttle = writePWM(throttle);
-    module.exports.flightcontrol.arm = function (val) { arm.servoWrite(val * 2500); }
+    module.exports.flightcontrol.arm = writePWM(arm);
 
 }
 
 function writePWM(pin) {
 
     return function (val) {
-        pin.servoWrite(val * 2000 + 500);
+        pin.servoWrite((val * 2000 + 500).toFixed(0));
     }
 
 }
