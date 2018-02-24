@@ -33,6 +33,11 @@ setTimeout(function() {
             // Control
             navigation.slowStart();
             navigation.hoverPID();
+            navigation.centerTent1();
+            // navigation.centerTent2();
+            // navigation.driftAdjuster();
+            // navigation.engineDecider();
+            // navigation.takeMeHome();
 
             // Log loop duration
             console.log("Loop duration: ", (new Date()).getTime() - tstart, "ms after ", tstart - tend, "ms");
