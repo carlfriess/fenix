@@ -79,6 +79,7 @@ setTimeout(function () {
                 // Control
                 navigation.slowStart();
                 navigation.hoverPID();
+                navigation.centerTent1();
                 break;
 
             case states.MOVE_ROOM_2:
