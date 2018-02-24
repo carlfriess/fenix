@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/carlfriess/fenix#readme",
   "dependencies": {
+    "node-pid-controller": "^1.0.0",
     "rpio": "^0.9.20"
   }
 }
