@@ -37,17 +37,17 @@ var tend = 0;
 var saw_green = false;
 var capture_in_progress = false;
 var saw_red = false;
-var current_gen = 0;
+var current_gen = 2;
 
 function wait_for_green() {
-    capture(false).then(color => {
+    capture(true).then(color => {
         if (color == GREEN) {
             saw_green = true;
         }
         else {
             wait_for_green();
         }
-    });
+    }).catch(console.error);
 }
 
 setTimeout(function () {
@@ -93,19 +93,19 @@ setTimeout(function () {
                     capture(true).then(color => {
                         if (color == RED) {
                             saw_red = true;
-                            capture_in_progress = false;
-                            current_gen++;
-                            network.sendGeneratorData(current_gen);
-                            console.log("\n\n\n!!! Rotating !!!\n\n");
-                            current_state = states.ROTATE;
                         }
-                    });
+                        capture_in_progress = false;
+                        network.sendGeneratorData(current_gen);
+                        current_gen--;
+                        console.log("\n\n\n!!! Rotating !!!\n\n");
+                        current_state = states.ROTATE;
+                    }).catch(console.error);
                 }
 
                 break;
 
             case states.ROTATE:
-                if (true && saw_red) {
+                if (true && (saw_red || current_gen < 0)) {
                     console.log("\n\n\n!!! Moving into Room 1 !!!\n\n");
                     current_state = states.MOVE_ROOM_1;
                 }
@@ -126,13 +126,20 @@ setTimeout(function () {
                     console.log("\n\n\nBye Bye :D :*\n\n");
                     io.flightcontrol.throttle(0);
                     io.flightcontrol.arm(0);
-                    process.abort();
+                    current_state = 100;
+                    //process.abort();
                 }
 
         }
 
         // Log loop duration
-        console.log("Loop duration: ", (new Date()).getTime() - tstart, "ms after ", tstart - tend, "ms");
+        var stateName = "UNKNOWN";
+        for(var name in states) {
+            if (current_state == states[name]) {
+                stateName = name;
+            }
+        }
+        console.log("Loop duration: ", (new Date()).getTime() - tstart, "ms after ", tstart - tend, "ms", "[", stateName, "]");
         tend = (new Date()).getTime();
 
     }, 60);
