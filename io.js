@@ -89,7 +89,7 @@ function init(config) {
     module.exports.flightcontrol.yaw = writePWM(yaw);
     module.exports.flightcontrol.pitch = writePWM(pitch);
     module.exports.flightcontrol.roll = writePWM(roll);
-    module.exports.flightcontrol.trottle = writePWM(throttle);
+    module.exports.flightcontrol.throttle = writePWM(throttle);
     module.exports.flightcontrol.arm = function (val) { arm.servoWrite(val * 2500); }
 
 }

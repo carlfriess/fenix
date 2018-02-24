@@ -1,5 +1,7 @@
 const Controller = require('node-pid-controller');
-const sleep = require('sleep');
+//const sleep = require('sleep');
+
+var io;
 
 // throttle 0.7 = 0
 var throttle = 0;
@@ -22,36 +24,33 @@ var hoverThrottle = 0.7;
 var targetHeight = 1.25;
 
 // Hover PID Controller
-var ctrHover = new Controller({
-    k_p: 0.5,
-    k_i: 0,
-    k_d: 0
-});
-
-var ctrRoll = new Controller({
-    k_p: 0.3,
-    k_i: 0,
-    k_d: 0
-});
-
-var ctrPitch = new Controller({
-    k_p: 0.3,
-    k_i: 0,
-    k_d: 0
-});
-
-var ctrYaw = new Controller({
-    k_p: 0.3,
-    k_i: 0,
-    k_d: 0
-});
+var ctrHover;
 
 // START 0, STOP 1
 var idle = 1;
 
+
+function init(config, ioInst) {
+
+    io = ioInst;
+
+    ctrHover = new Controller({
+        k_p: 0.5,
+        k_i: 0,
+        k_d: 0
+    });
+
+    ctrHover.setTarget(targetHeight);
+
+}
+
 function hoverPID(){
 
-    while (true) {
+    distBottom = io.ultrasonic.bottom;
+    let correction  = ctrHover.update(distBottom);
+    throttleAdjuster(correction);
+
+    /*while (true) {
         distBottom = getDistanceBottom();
         let correction  = ctrHover.update(distBottom);
         throttleAdjuster(correction);
@@ -86,12 +85,12 @@ function hoverPID(){
             // Yaw 0-0.5 Maximum Nose Left Rotation
             setYaw(0.48);
         }
-    }
+    }*/
 }
 
 // Adjust Throttle
 function throttleAdjuster(correction) {
-    throttle = hoverThrottle + correction / targetHeight * ((correction > 0) ? hoverThrottle : 1 - hoverThrottle );
+    io.flightcontrol.throttle(hoverThrottle + correction / targetHeight * ((correction > 0) ? hoverThrottle : 1 - hoverThrottle ));
 }
 
 // Check in Idle in an Interval if signals START (Green) or NOT (Red)
@@ -106,7 +105,7 @@ function main() {
         if (analyse_picture == GREEN) {
             idle = 0;
         } else{
-            sleep.msleep(100);
+            //sleep.msleep(100);
         }
     }
 
@@ -116,4 +115,10 @@ function main() {
 
     setThrottle(0.1);
     hoverPID();
+}
+
+
+module.exports = {
+    "init": init,
+    "hoverPID": hoverPID
 }

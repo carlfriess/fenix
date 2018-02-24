@@ -1,5 +1,6 @@
 let io = require('./io.js');
 let network = require('./network.js');
+let navigation = require('./navigation.js');
 
 let config = require('./config.json');
 
@@ -7,12 +8,8 @@ let config = require('./config.json');
 // Initialization
 io.init(config);
 network.initializeNetwork(config);
+navigation.init(config, io);
 
-var front = 0;
-var back = 0;
-var left = 0;
-var right = 0;
-var bottom = 0;
 
 var tstart = 0;
 var tend = 0;
@@ -25,7 +22,8 @@ setTimeout(function() {
         // Send telemetry data
         network.sendUltrasonicData(io.ultrasonic.front,io.ultrasonic.right,io.ultrasonic.back,io.ultrasonic.left,io.ultrasonic.bottom);
 
-        // Control....
+        // Control
+        navigation.hoverPID();
 
         // Log loop duration
         console.log("Loop duration: ", (new Date()).getTime() - tstart, "ms after ", tstart - tend, "ms");
