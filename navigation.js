@@ -1,5 +1,7 @@
 const Controller = require('node-pid-controller');
-const sleep = require('sleep');
+//const sleep = require('sleep');
+
+var io;
 
 // throttle 0.7 = 0
 var throttle = 0;
@@ -19,39 +21,37 @@ var distLeft = 0;
 
 // hover Throttle
 var hoverThrottle = 0.7;
-var targetHeight = 1.25;
+var targetHeight = 125;
 
 // Hover PID Controller
-var ctrHover = new Controller({
-    k_p: 0.5,
-    k_i: 0,
-    k_d: 0
-});
-
-var ctrRoll = new Controller({
-    k_p: 0.3,
-    k_i: 0,
-    k_d: 0
-});
-
-var ctrPitch = new Controller({
-    k_p: 0.3,
-    k_i: 0,
-    k_d: 0
-});
-
-var ctrYaw = new Controller({
-    k_p: 0.3,
-    k_i: 0,
-    k_d: 0
-});
+var ctrHover;
 
 // START 0, STOP 1
 var idle = 1;
 
+
+function init(config, ioInst) {
+
+    io = ioInst;
+
+    ctrHover = new Controller({
+        k_p: 0.5,
+        k_i: 0,
+        k_d: 0
+    });
+
+    ctrHover.setTarget(targetHeight);
+
+}
+
 function hoverPID(){
 
-    while (true) {
+    distBottom = io.ultrasonic.bottom;
+    console.log(distBottom);
+    let correction  = ctrHover.update(distBottom);
+    throttleAdjuster(correction);
+
+    /*while (true) {
         distBottom = getDistanceBottom();
         let correction  = ctrHover.update(distBottom);
         throttleAdjuster(correction);
@@ -86,12 +86,16 @@ function hoverPID(){
             // Yaw 0-0.5 Maximum Nose Left Rotation
             setYaw(0.48);
         }
-    }
+    }*/
 }
 
 // Adjust Throttle
 function throttleAdjuster(correction) {
-    throttle = hoverThrottle + correction / targetHeight * ((correction > 0) ? hoverThrottle : 1 - hoverThrottle );
+    var throttle = hoverThrottle + correction / targetHeight * ((correction > 0) ?  1 - hoverThrottle : hoverThrottle );
+    throttle = Math.max(throttle, 0);
+    throttle = Math.min(throttle, 1);
+    console.log("Throttle:", throttle);
+    io.flightcontrol.throttle(throttle);
 }
 
 // Check in Idle in an Interval if signals START (Green) or NOT (Red)
@@ -106,7 +110,7 @@ function main() {
         if (analyse_picture == GREEN) {
             idle = 0;
         } else{
-            sleep.msleep(100);
+            //sleep.msleep(100);
         }
     }
 
@@ -116,4 +120,10 @@ function main() {
 
     setThrottle(0.1);
     hoverPID();
+}
+
+
+module.exports = {
+    "init": init,
+    "hoverPID": hoverPID
 }

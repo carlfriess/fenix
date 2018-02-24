@@ -1,0 +1,43 @@
+{
+    "pins": {
+        "us": {
+            "front": {
+                "trigger": 17,
+                "echo": 18
+            },
+            "back": {
+                "trigger": 5,
+                "echo": 6
+            },
+            "left": {
+                "trigger": 27,
+                "echo": 22
+            },
+            "right": {
+                "trigger": 23,
+                "echo": 24
+            },
+            "bottom": {
+                "trigger": 13,
+                "echo": 19
+            }
+        },
+        "fc": {
+            "throttle": 7,
+            "roll": 20,
+            "pitch": 16,
+            "yaw": 12,
+            "arm": 1
+        }
+    },
+    "network": {
+        "ip_address": "130.82.238.44",
+        "log_port": 3000,
+        "protocol_port": 3001,
+        "protocol": {
+            "generator": 1,
+            "ultrasonic": 2,
+            "image": 3
+        }
+    }
+}
