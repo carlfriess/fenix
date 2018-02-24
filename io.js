@@ -53,7 +53,7 @@ function readUltrasonic(pins) {
 
     // Wait for pulse on echo pin
     while (!rpio.read(pins.echo)) {
-        if (microtime.now() - ttrig >= 10000) {
+        if (microtime.now() - ttrig >= 5000) {
             return null;
         }
     }
@@ -61,7 +61,7 @@ function readUltrasonic(pins) {
     // Measure how long the echo pin was held high (pulse width)
     var t1 = microtime.now();
     while (rpio.read(pins.echo)) {
-        if (microtime.now() - ttrig >= 58000) {
+        if (microtime.now() - ttrig >= 29000) {
             return null;
         }
     }
