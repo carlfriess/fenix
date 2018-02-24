@@ -55,7 +55,7 @@ function getThreeColors(image) {
 
 function colorRecognitionThreshhold(image, x, y, w, h) {
 
-    // Initialize total values for both red and green
+    // Initializing total values for both red and green
     var totalRed = 0;
     var totalGreen = 0;
 
@@ -107,22 +107,21 @@ function colorRecognitionThreshhold(image, x, y, w, h) {
 
 
 
-function colorRecognitionSimple(jimpImage, x, y, w, h) {
+function colorRecognitionSimple(image, x, y, w, h) {
 
+    // Initializing total values for both red and green
     var totalRed = 0;
     var totalGreen = 0;
 
-    //image.scan(0, 0, image.bitmap.width, image.bitmap.height, function (x, y, idx) {
-    jimpImage.scan(x, y, w, h, function (x, y, idx) {
+    // Iterating through every pixel and adding 
+    image.scan(x, y, w, h, function (x, y, idx) {
     
-
         var red   = this.bitmap.data[ idx + 0 ];
         var green = this.bitmap.data[ idx + 1 ];
         var blue  = this.bitmap.data[ idx + 2 ];
         var alpha = this.bitmap.data[ idx + 3 ];
 
-        // rgba values run from 0 - 255
-        
+        // Adding color values     
         totalRed += red;
         totalGreen += green;
 
