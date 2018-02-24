@@ -1,0 +1,32 @@
+{
+
+    "pins": {
+
+        "us": {
+
+            "front": {
+                "trigger": 11,
+                "echo": 12
+            },
+            "back": {
+                "trigger": 11,
+                "echo": 12
+            },
+            "left": {
+                "trigger": 11,
+                "echo": 12
+            },
+            "right": {
+                "trigger": 11,
+                "echo": 12
+            },
+            "bottom": {
+                "trigger": 11,
+                "echo": 12
+            }
+
+        }
+
+    }
+
+}
