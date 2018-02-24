@@ -20,9 +20,9 @@ var distLeft = 0;
 // TODO: get regularly all parameters
 
 // hover Throttle
-var hoverThrottle = 0.7;
-var maxHeight = 200;
-var targetHeight = 125;
+var hoverThrottle = 0.6;
+var maxHeight = 150;
+var targetHeight = 30;
 
 // Hover PID Controller
 var ctrHover;
