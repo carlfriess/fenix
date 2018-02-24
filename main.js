@@ -5,6 +5,9 @@ let navigation = require('./navigation.js');
 
 let config = require('./config.json');
 
+let GREEN = 1;
+let RED = 2;
+
 var states = {
     WAITING: 0,
     CENTER_ROOM: 1,
@@ -14,7 +17,7 @@ var states = {
     MOVE_ROOM_1: 5,
     LAND: 6
 };
-var current_state = WAITING;
+var current_state = states.WAITING;
 
 
 // Initialization
@@ -31,9 +34,27 @@ navigation.init(config, io);
 var tstart = 0;
 var tend = 0;
 
+var saw_green = false;
+var capture_in_progress = false;
+var capture_finished = false;
+var saw_red = false;
+var current_gen = 0;
+
+function wait_for_green() {
+    capture(false).then(color => {
+        if (color == GREEN) {
+            saw_green = true;
+        }
+        else {
+            wait_for_green();
+        }
+    });
+}
+
 setTimeout(function () {
     console.log("\n\n\n***** ARMING *****\n\n");
     io.flightcontrol.arm(1);
+    wait_for_green();
     setInterval(function control() {
 
         tstart = (new Date()).getTime();
@@ -41,52 +62,72 @@ setTimeout(function () {
         // Send telemetry data
         network.sendUltrasonicData(io.ultrasonic.front, io.ultrasonic.right, io.ultrasonic.back, io.ultrasonic.left, io.ultrasonic.bottom);
 
-        // Control
-        navigation.slowStart();
-        navigation.hoverPID();
-
         switch (current_state) {
 
             case states.WAITING:
-                if (GREEN) {
+                if (saw_green) {
+                    console.log("!!! SAW GREEN !!!");
                     current_state = states.CENTER_ROOM;
                 }
                 break;
 
             case states.CENTER_ROOM:
-                if (DONE) {
+                if (true) {
+                    console.log("\n\n\n!!! Moving into Room 2 !!!\n\n");
                     current_state = states.MOVE_ROOM_2;
                 }
+                // Control
+                navigation.slowStart();
+                navigation.hoverPID();
                 break;
 
             case states.MOVE_ROOM_2:
-                if (DONE) {
+                if (true) {
+                    console.log("\n\n\n!!! Capturing Generator !!!\n\n");
                     current_state = states.CAPTURE;
                 }
                 break;
 
             case states.CAPTURE:
-                if (PICTURE_TAKEN) {
+                if (capture_finished) {
+                    capture_in_progress = false;
+                    capture_finished = false;
+                    current_gen++;
                     current_state = states.ROTATE;
+                    console.log("\n\n\n!!! Rotating !!!\n\n");
+                }
+                else if (!capture_in_progress) {
+                    capture_in_progress = true;
+                    capture(true).then(color => {
+                        if (color ==  RED) {
+                            saw_red = true;
+                            capture_finished = true;
+                            network.sendGeneratorData(current_gen);
+                        }
+                    });
                 }
                 break;
 
             case states.ROTATE:
-                if (DONE_AND_FOUND) {
+                if (true && saw_red) {
+                    console.log("\n\n\n!!! Moving into Room 1 !!!\n\n");
                     current_state = states.MOVE_ROOM_1;
                 }
-                else (DONE_AND_NOT_FOUND) {
+                else if (true && !saw_red) {
+                    console.log("\n\n\n!!! Capturing Generator !!!\n\n");
                     current_state = states.CAPTURE;
                 }
                 break;
 
             case states.MOVE_ROOM_1:
-                if (DONE) {
+                if (true) {
+                    console.log("\n\n\n!!! Landing !!!\n\n");
                     current_state = states.LAND;
                 }
 
             case states.LAND:
-                if (DONE) {
+                if (io.ultrasonic.bottom < 6) {
+                    console.log("\n\n\nBye Bye :D :*\n\n");
                     io.flightcontrol.throttle(0);
                     io.flightcontrol.arm(0);
                     process.abort();
@@ -116,11 +157,11 @@ async function capture(relay) {
 
         if (green > red * 1.25 && green > 128) {
             console.log('GREEN IMAGE!');
-            return 1;
+            return GREEN;
         } else if (red > green * 1.25 && red > 128) {
             console.log('RED IMAGE!');
             if (relay) network.sendImageData();
-            return 2;
+            return RED;
         } else {
             console.log('? IMAGE!');
             return -1;
