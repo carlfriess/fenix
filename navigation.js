@@ -21,6 +21,7 @@ var distLeft = 0;
 
 // hover Throttle
 var hoverThrottle = 0.7;
+var maxHeight = 200;
 var targetHeight = 125;
 
 // Hover PID Controller
@@ -44,8 +45,27 @@ function init(config, ioInst) {
 
 }
 
-function hoverPID(){
+let isStarting = true;
+function slowStart(){
+    if (!isStarting) return;
 
+    while(isStarting){
+
+        throttle += 0.01;
+        io.flightcontrol.throttle(throttle);
+
+        distBottom = io.ultrasonic.bottom;
+        console.log(distBottom);
+
+        if (distBottom > 10) {
+            isStarting = false;
+        }
+
+    }
+}
+
+function hoverPID(){
+    if (isStarting) return;
     distBottom = io.ultrasonic.bottom;
     console.log(distBottom);
     let correction  = ctrHover.update(distBottom);
@@ -91,7 +111,12 @@ function hoverPID(){
 
 // Adjust Throttle
 function throttleAdjuster(correction) {
-    var throttle = hoverThrottle + correction / targetHeight * ((correction > 0) ?  1 - hoverThrottle : hoverThrottle );
+    var throttle;
+    if (correction > 0) {
+        throttle = hoverThrottle + correction / (targetHeight) * (1 - hoverThrottle);
+    } else {
+        throttle = hoverThrottle + correction / (maxHeight - targetHeight) * hoverThrottle;
+    }
     throttle = Math.max(throttle, 0);
     throttle = Math.min(throttle, 1);
     console.log("Throttle:", throttle);

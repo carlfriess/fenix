@@ -31,6 +31,7 @@ setTimeout(function() {
             network.sendUltrasonicData(io.ultrasonic.front, io.ultrasonic.right, io.ultrasonic.back, io.ultrasonic.left, io.ultrasonic.bottom);
 
             // Control
+            navigation.slowStart();
             navigation.hoverPID();
 
             // Log loop duration
