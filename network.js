@@ -10,6 +10,12 @@ function initializeNetwork(conf) {
         port: config.network.protocol_port,
         host: config.network.ip_address
     });
+
+    socket.on('close', () => {
+        console.log("Socket Closed!");
+        initializeNetwork(conf);
+    });
+
 }
 
 function sendGeneratorData(generatorID) {
