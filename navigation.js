@@ -23,25 +23,74 @@ var targetHeight = 1.25;
 
 // Hover PID Controller
 var ctrHover = new Controller({
-  k_p: 0.5,
-  k_i: 0,
-  k_d: 0
+    k_p: 0.5,
+    k_i: 0,
+    k_d: 0
 });
 
-// STOP 0, START 1
-var start = 0;
+var ctrRoll = new Controller({
+    k_p: 0.3,
+    k_i: 0,
+    k_d: 0
+});
 
-function findHeight(){
+var ctrPitch = new Controller({
+    k_p: 0.3,
+    k_i: 0,
+    k_d: 0
+});
+
+var ctrYaw = new Controller({
+    k_p: 0.3,
+    k_i: 0,
+    k_d: 0
+});
+
+// START 0, STOP 1
+var idle = 1;
+
+function hoverPID(){
 
     while (true) {
-        let distBottom = getDistanceBottom();
+        distBottom = getDistanceBottom();
         let correction  = ctrHover.update(distBottom);
+        throttleAdjuster(correction);
 
-        thrustAdjuster(correction);
+        oldDistFront = distFront;
+        distFront = getDistanceFront();
+
+        oldDistRight = distRight;
+        distRight = getDistanceRight();
+
+        oldDistLeft = distLeft;
+        distLeft = getDistanceLeft();
+
+        if (oldDistFront - distFront > 10 || distBack - oldDistBack > 10) {
+            // Drift Richtung Front
+            // Pitch 0.5-1 Maximum Nose Up
+            setPitch(0.52);
+
+        }else if (distFront - oldDistFront > 10 || oldDistBack - distBack > 10) {
+            // Drift Richtung Back
+            // Pitch 0-0.5 Maximum Nose Down
+            setPitch(0.48);
+        }
+
+        if (oldDistLeft - distLeft > 10 || distRight - oldDistRight > 10) {
+            // Drift Richtung Left
+            // Yaw 0.5-1 Maximum Nose Right Rotation
+            setYaw(0.52);
+
+        }else if (distLeft - oldDistLeft > 10 || oldDistRight - distRight > 10) {
+            // Drift Richtung Right
+            // Yaw 0-0.5 Maximum Nose Left Rotation
+            setYaw(0.48);
+        }
     }
 }
 
-function thrustAdjuster(correction) {
+// Adjust Throttle
+function throttleAdjuster(correction) {
     throttle = hoverThrottle + correction / targetHeight * ((correction > 0) ? hoverThrottle : 1 - hoverThrottle );
 }
 
@@ -49,17 +98,16 @@ function thrustAdjuster(correction) {
 function main() {
 
     /*
-        GREEN -> Start from Idle + Register Distance to Wall (DIST) + 2m hoch steigen
+        GREEN -> Start from Idle + Register Distance to Wall (DIST) + 1m hoch steigen
     */
-    while(!start){
+    while(idle){
 
         take_picture();
-        if (analyse_picture == 2) {
-            start = 1;
+        if (analyse_picture == GREEN) {
+            idle = 0;
         } else{
             sleep.msleep(100);
         }
-
     }
 
     var distFront = getDistanceFront();
@@ -67,6 +115,5 @@ function main() {
     ctrHover.setTarget(targetHeight);
 
     setThrottle(0.1);
-    findHeight();
-
+    hoverPID();
 }
