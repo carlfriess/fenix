@@ -1,3 +1,4 @@
+let Vibrant = require('node-vibrant');
 let io = require('./io.js');
 let network = require('./network.js');
 let navigation = require('./navigation.js');
@@ -19,10 +20,10 @@ navigation.init(config, io);
 var tstart = 0;
 var tend = 0;
 
-setTimeout(function() {
+setTimeout(function () {
     console.log("\n\n\n***** ARMING *****\n\n");
     io.flightcontrol.arm(1);
-    setTimeout(function() {
+    setTimeout(function () {
         setInterval(function control() {
 
             tstart = (new Date()).getTime();
@@ -42,14 +43,45 @@ setTimeout(function() {
     }, 10000);
 }, 5000);
 
-function takePic() {
-    io.camera.snap().then(() => {
-        console.log("Image captured!");
-        network.sendImageData();
-        takePic();
-    }).catch((err) => {
-        console.log("FAILURE: Image capture", err);
-        setTimeout(takePic, 100);
-    });
+async function capture(relay) {
+    try {
+        await io.camera.snap();
+        let palette = await Vibrant.from(`${__dirname}/pic.jpg`).getPalette();
+
+        if (palette.Vibrant == null) {
+            console.log("? IMAGE");
+            return -1;
+        }
+
+        let red = palette.Vibrant.r;
+        let green = palette.Vibrant.g;
+
+        if (green > red * 1.25 && green > 128) {
+            console.log('GREEN IMAGE!');
+            return 1;
+        } else if (red > green * 1.25 && red > 128) {
+            console.log('RED IMAGE!');
+            if (relay) network.sendImageData();
+            return 2;
+        } else {
+            console.log('? IMAGE!');
+            return -1;
+        }
+    } catch (e) {
+        console.log("Image Capture Error: " + e);
+    }
 }
-takePic();
+
+
+// function takePic() {
+//     io.camera.snap().then(() => {
+//         console.log("Image captured!");
+//         network.sendImageData();
+//         takePic();
+//     }).catch((err) => {
+//         console.log("FAILURE: Image capture", err);
+//         setTimeout(takePic, 100);
+//     });
+// }
+
+// takePic();

@@ -46,7 +46,8 @@ function init(config, ioInst) {
 }
 
 let isStarting = true;
-function slowStart(){
+
+function slowStart() {
     if (!isStarting) return;
 
     throttle += 0.01;
@@ -61,11 +62,11 @@ function slowStart(){
 
 }
 
-function hoverPID(){
+function hoverPID() {
     if (isStarting) return;
     distBottom = io.ultrasonic.bottom;
     console.log(distBottom);
-    let correction  = ctrHover.update(distBottom);
+    let correction = ctrHover.update(distBottom);
     throttleAdjuster(correction);
 
     /*while (true) {
@@ -126,12 +127,12 @@ function main() {
     /*
         GREEN -> Start from Idle + Register Distance to Wall (DIST) + 1m hoch steigen
     */
-    while(idle){
+    while (idle) {
 
         take_picture();
         if (analyse_picture == GREEN) {
             idle = 0;
-        } else{
+        } else {
             //sleep.msleep(100);
         }
     }
