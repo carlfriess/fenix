@@ -37,28 +37,21 @@ function init(config) {
     // DEBUG ONLY
     config = require('./config.json');
 
-    console.log("1");
-
     triggerFront = new Gpio(config.pins.us.front.trigger, {mode: Gpio.OUTPUT});
     echoFront = new Gpio(config.pins.us.front.echo, {mode: Gpio.INPUT, alert: true});
 
-    console.log("2");
     triggerRight = new Gpio(config.pins.us.right.trigger, {mode: Gpio.OUTPUT});
     echoRight = new Gpio(config.pins.us.right.echo, {mode: Gpio.INPUT, alert: true});
 
-    console.log("3");
     triggerBack = new Gpio(config.pins.us.back.trigger, {mode: Gpio.OUTPUT});
     echoBack = new Gpio(config.pins.us.back.echo, {mode: Gpio.INPUT, alert: true});
 
-    console.log("4");
     triggerLeft = new Gpio(config.pins.us.left.trigger, {mode: Gpio.OUTPUT});
     echoLeft = new Gpio(config.pins.us.left.echo, {mode: Gpio.INPUT, alert: true});
 
-    console.log("5");
     triggerBottom = new Gpio(config.pins.us.bottom.trigger, {mode: Gpio.OUTPUT});
     echoBottom = new Gpio(config.pins.us.bottom.echo, {mode: Gpio.INPUT, alert: true});
 
-    console.log("6");
     triggerFront.digitalWrite(0);
     triggerRight.digitalWrite(0);
     triggerBack.digitalWrite(0);

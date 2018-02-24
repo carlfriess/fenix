@@ -17,20 +17,22 @@ var bottom = 0;
 var tstart = 0;
 var tend = 0;
 
-setInterval(function control() {
+setTimeout(function() {
+    setInterval(function control() {
 
-    tstart = (new Date()).getTime();
+        tstart = (new Date()).getTime();
 
-    // Send telemetry data
-    network.sendUltrasonicData(io.ultrasonic.front,io.ultrasonic.right,io.ultrasonic.back,io.ultrasonic.left,io.ultrasonic.bottom);
+        // Send telemetry data
+        network.sendUltrasonicData(io.ultrasonic.front,io.ultrasonic.right,io.ultrasonic.back,io.ultrasonic.left,io.ultrasonic.bottom);
 
-    // Control....
+        // Control....
 
-    // Log loop duration
-    console.log("Loop duration: ", (new Date()).getTime() - tstart, "ms after ", tstart - tend, "ms");
-    tend = (new Date()).getTime();
+        // Log loop duration
+        console.log("Loop duration: ", (new Date()).getTime() - tstart, "ms after ", tstart - tend, "ms");
+        tend = (new Date()).getTime();
 
-}, 60);
+    }, 60);
+}, 1000);
 
 function takePic() {
     io.camera.snap().then(() => {
