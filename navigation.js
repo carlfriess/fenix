@@ -20,9 +20,9 @@ var distLeft = 0;
 // TODO: get regularly all parameters
 
 // hover Throttle
-var hoverThrottle = 0.7;
-var maxHeight = 200;
-var targetHeight = 125;
+var hoverThrottle = 0.6;
+var maxHeight = 150;
+var targetHeight = 30;
 
 // Hover PID Controller
 var ctrHover;
@@ -49,19 +49,16 @@ let isStarting = true;
 function slowStart(){
     if (!isStarting) return;
 
-    while(isStarting){
+    throttle += 0.01;
+    console.log("Throttle:", throttle);
+    io.flightcontrol.throttle(throttle);
 
-        throttle += 0.01;
-        io.flightcontrol.throttle(throttle);
+    distBottom = io.ultrasonic.bottom;
 
-        distBottom = io.ultrasonic.bottom;
-        console.log(distBottom);
-
-        if (distBottom > 10) {
-            isStarting = false;
-        }
-
+    if (distBottom > 10) {
+        isStarting = false;
     }
+
 }
 
 function hoverPID(){
@@ -150,5 +147,6 @@ function main() {
 
 module.exports = {
     "init": init,
-    "hoverPID": hoverPID
+    "hoverPID": hoverPID,
+    "slowStart": slowStart
 }

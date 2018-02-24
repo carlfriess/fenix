@@ -7,11 +7,11 @@ let config = require('./config.json');
 
 // Initialization
 io.init(config);
+io.flightcontrol.arm(0);
 io.flightcontrol.throttle(0);
 io.flightcontrol.yaw(0.5);
 io.flightcontrol.pitch(0.5);
 io.flightcontrol.roll(0.5);
-io.flightcontrol.arm(0);
 network.initializeNetwork(config, io);
 navigation.init(config, io);
 
@@ -40,7 +40,7 @@ setTimeout(function() {
 
         }, 60);
     }, 10000);
-}, 3000);
+}, 5000);
 
 function takePic() {
     io.camera.snap().then(() => {
