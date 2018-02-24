@@ -10,6 +10,10 @@ function initializeNetwork(conf) {
         port: config.network.protocol_port,
         host: config.network.ip_address
     });
+
+    socket.on('data', data => {
+        // Emergency Stop - Shut down throttle
+    });
 }
 
 function sendGeneratorData(generatorID) {
