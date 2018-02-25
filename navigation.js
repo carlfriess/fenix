@@ -279,7 +279,7 @@ function centerTent2() {
     // Yaw 0-0.5 Maximum Nose Left Rotation
     // Yaw 0.5-1 Maximum Nose Right Rotation
     distRight = io.ultrasonic.right;
-    console.log("Distance Right:", distRight);
+    console.log("[CT2] Distance Right:", distRight);
     correction = ctrRightCT2.update(distRight);
 
     // Yaw 0-0.5 Maximum Nose Left Rotation
@@ -287,7 +287,7 @@ function centerTent2() {
     yaw = 0.5 - correction/(tent2Center)*(maxYaw - 0.5); // TODO: Test this
     yaw = Math.max(yaw, minYaw);
     yaw = Math.min(yaw, maxYaw);
-    console.log("yaw:", yaw);
+    console.log("[CT2] yaw:", yaw);
     io.flightcontrol.yaw(yaw);
 
     // TODO: Mindestabstand von Front und Back auf 20cm machen, damit man durch die Tür kommt
@@ -295,15 +295,15 @@ function centerTent2() {
     distFront = io.ultrasonic.front;
     distBack = io.ultrasonic.back;
     diffFrontBack = distFront - distBack;
-    console.log("Distance Front:", distFront);
-    console.log("Distance Back:", distBack);
-    console.log("Distance Front-Back:", diffFrontBack);
+    console.log("[CT2] Distance Front:", distFront);
+    console.log("[CT2] Distance Back:", distBack);
+    console.log("[CT2] Distance Front-Back:", diffFrontBack);
     let correction = ctrFrontBackDiffCT2.update(diffFrontBack);
     // TODO: Add Pitch Correction
     pitch = 0.5 + correction/((distFront+distBack)/2)*(maxPitch - 0.5);
     pitch = Math.max(pitch, minPitch);
     pitch = Math.min(pitch, maxPitch);
-    console.log("pitch:", pitch);
+    console.log("[CT2] pitch:", pitch);
     io.flightcontrol.pitch(pitch);
 
     if (Math.abs(distRight - tent2Center) < 20 ) {
@@ -313,6 +313,7 @@ function centerTent2() {
         yaw = 0.5;
         io.flightcontrol.yaw(yaw);
     }
+    return isCenterT2;
 }
 
 // Rotates 90 degrees counterclockwise

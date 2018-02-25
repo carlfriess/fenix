@@ -84,7 +84,8 @@ setTimeout(function () {
                 break;
 
             case states.MOVE_ROOM_2:
-                if (true) {
+                let isCT2 = centerTent2;
+                if (isCT2) {
                     console.log("\n\n\n!!! Capturing Generator !!!\n\n");
                     current_state = states.CAPTURE;
                 }
