@@ -94,9 +94,9 @@ setTimeout(function () {
                     capture(true).then(color => {
                         if (color == RED) {
                             saw_red = true;
+                            network.sendGeneratorData(current_gen);
                         }
                         capture_in_progress = false;
-                        network.sendGeneratorData(current_gen);
                         current_gen--;
                         console.log("\n\n\n!!! Rotating !!!\n\n");
                         current_state = states.ROTATE;
