@@ -28,7 +28,7 @@ io.flightcontrol.yaw(0.5);
 io.flightcontrol.pitch(0.5);
 io.flightcontrol.roll(0.5);
 network.initializeNetwork(config, io);
-navigation.init(config, io);
+
 
 
 var tstart = 0;
@@ -51,6 +51,7 @@ function wait_for_green() {
 }
 
 setTimeout(function () {
+    navigation.init(config, io);
     console.log("\n\n\n***** ARMING *****\n\n");
     io.flightcontrol.arm(1);
     wait_for_green();
