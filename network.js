@@ -31,7 +31,8 @@ function initializeNetwork(conf, ioInst) {
 function sendGeneratorData(generatorID) {
     let buffer = Buffer.alloc(2);
     buffer.writeUInt8(config.network.protocol.generator, 0);
-    socket.write(Buffer.from[generatorID]);
+    buffer.writeUInt8(generatorID, 1);
+    socket.write(buffer);
 }
 
 function sendUltrasonicData(forward, right, backward, left, down) {

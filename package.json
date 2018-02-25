@@ -20,7 +20,8 @@
   "homepage": "https://github.com/carlfriess/fenix#readme",
   "dependencies": {
     "node-pid-controller": "^1.0.0",
-    "pigpio": "^0.6.4",
-    "pi-camera": "^1.0.1"
+    "node-vibrant": "^3.0.0",
+    "pi-camera": "^1.0.1",
+    "pigpio": "^0.6.4"
   }
 }
