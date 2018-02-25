@@ -197,13 +197,13 @@ function centerTent1() {
     console.log("yaw:", yaw);
     io.flightcontrol.yaw(yaw);
 
-    if (Math.abs(distFront - tent1/2) < 20 && Math.abs(distRight - tent1/2) < 20 ) {
+    /*if (Math.abs(distFront - tent1/2) < 20 && Math.abs(distRight - tent1/2) < 20 ) {
         isCenterT1 = true;
         pitch = 0.5;
         io.flightcontrol.pitch(pitch);
         yaw = 0.5;
         io.flightcontrol.yaw(yaw);
-    }
+    }*/
 
     return isCenterT1;
 }

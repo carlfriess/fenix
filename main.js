@@ -79,10 +79,10 @@ setTimeout(function () {
                 navigation.hoverPID();
                 let isCT1 = navigation.centerTent1();
 
-                if (isCT1) {
+                /*if (isCT1) {
                     console.log("\n\n\n!!! Moving into Room 2 !!!\n\n");
                     current_state = states.MOVE_ROOM_2;
-                }
+                }*/
                 break;
 
             case states.MOVE_ROOM_2:
@@ -109,6 +109,8 @@ setTimeout(function () {
                     }).catch(console.error);
                 }
 
+                navigation.hoverPID();
+
                 break;
 
             case states.ROTATE:
@@ -117,7 +119,7 @@ setTimeout(function () {
                 // 2 (1)     0 (-1)
                 //      1 (0)
 
-                if (current_gen < 0) {
+                /*if (current_gen < 0) {
                     console.log("\n\n\n!!! Moving into Room 1 !!!\n\n");
                     current_state = states.MOVE_ROOM_1;
                 } else if (!rotated) {
@@ -130,7 +132,20 @@ setTimeout(function () {
                     rotated = false;
                     console.log("\n\n\n!!! Capturing Generator !!!\n\n");
                     current_state = states.CAPTURE;
+                }*/
+
+                navigation.hoverPID();
+
+                if (!rotated && current_gen >= 0) {
+                    rotated = true;
+                    io.flightcontrol.roll(0.45);
+                    setTimeout(function () {
+                        current_state = states.CAPTURE;
+                        rotated = false;
+                        io.flightcontrol.roll(0.5);
+                    }, 5000);
                 }
+
                 break;
 
             case states.MOVE_ROOM_1:
