@@ -19,8 +19,8 @@ var distLeft = 0;
 
 // hover Throttle
 var hoverThrottle = 0.8;
-var maxHeight = 150;
-var targetHeight = 50;
+var maxHeight = 200;
+var targetHeight = 100;
 
 var defaultPitch = 0.5;
 var maxPitch = 0.52; // up
