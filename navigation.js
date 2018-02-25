@@ -204,6 +204,8 @@ function centerTent1() {
         yaw = 0.5;
         io.flightcontrol.yaw(yaw);
     }
+
+    return isCenterT1;
 }
 
 // Adjust Throttle
@@ -429,7 +431,7 @@ module.exports = {
     "hoverPID": hoverPID,
     "slowStart": slowStart,
     "centerTent1": centerTent1,
-    "isCenterT2": isCenterT2,
+    "centerTent2": centerTent2,
     "rotate90": rotate90,
     "takeMeHome": takeMeHome
 }

@@ -73,18 +73,20 @@ setTimeout(function () {
                 break;
 
             case states.CENTER_ROOM:
-                if (false) {
-                    console.log("\n\n\n!!! Moving into Room 2 !!!\n\n");
-                    current_state = states.MOVE_ROOM_2;
-                }
+
                 // Control
                 navigation.slowStart();
                 navigation.hoverPID();
-                navigation.centerTent1();
+                let isCT1 = navigation.centerTent1();
+
+                if (isCT1) {
+                    console.log("\n\n\n!!! Moving into Room 2 !!!\n\n");
+                    current_state = states.MOVE_ROOM_2;
+                }
                 break;
 
             case states.MOVE_ROOM_2:
-                let isCT2 = centerTent2;
+                let isCT2 = navigation.centerTent2;
                 if (isCT2) {
                     console.log("\n\n\n!!! Capturing Generator !!!\n\n");
                     current_state = states.CAPTURE;
