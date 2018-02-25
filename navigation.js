@@ -18,7 +18,7 @@ var distRight = 0;
 var distLeft = 0;
 
 // hover Throttle
-var hoverThrottle = 0.6;
+var hoverThrottle = 0.8;
 var maxHeight = 150;
 var targetHeight = 30;
 
@@ -126,7 +126,7 @@ function slowStart() {
 
     distBottom = io.ultrasonic.bottom;
 
-    if (distBottom > 10) {
+    if (distBottom > 6) {
         isStarting = false;
     }
 }

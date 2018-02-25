@@ -71,7 +71,7 @@ setTimeout(function () {
                 break;
 
             case states.CENTER_ROOM:
-                if (true) {
+                if (false) {
                     console.log("\n\n\n!!! Moving into Room 2 !!!\n\n");
                     current_state = states.MOVE_ROOM_2;
                 }
