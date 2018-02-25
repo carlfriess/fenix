@@ -20,7 +20,7 @@ var distLeft = 0;
 // hover Throttle
 var hoverThrottle = 0.8;
 var maxHeight = 150;
-var targetHeight = 30;
+var targetHeight = 50;
 
 var defaultPitch = 0.5;
 var maxPitch = 0.52;
@@ -66,15 +66,15 @@ function init(config, ioInst) {
     tent1 = Math.min(tent1Length, tent1Width);
 
     ctrHover = new Controller({
-        k_p: 0.5,
-        k_i: 0,
-        k_d: 0
+        k_p: 0.25,
+        k_i: 0.001,
+        k_d: 0.001
     });
 
     ctrFrontCT1 = new Controller({
-        k_p: 0.5,
-        k_i: 0,
-        k_d: 0
+        k_p: 0.25,
+        k_i: 0.001,
+        k_d: 0.001
     });
 
     /*
@@ -92,9 +92,9 @@ function init(config, ioInst) {
     */
 
     ctrRightCT1 = new Controller({
-        k_p: 0.5,
-        k_i: 0,
-        k_d: 0
+        k_p: 0.25,
+        k_i: 0.001,
+        k_d: 0.001
     });
 
     ctrHover.setTarget(targetHeight);
