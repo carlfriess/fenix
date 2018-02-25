@@ -38,6 +38,7 @@ var saw_green = false;
 var capture_in_progress = false;
 var saw_red = false;
 var current_gen = 2;
+var rotated = false;
 
 function wait_for_green() {
     capture(true).then(color => {
@@ -90,6 +91,7 @@ setTimeout(function () {
                 break;
 
             case states.CAPTURE:
+                // Take a picture of the current engine in front of us...
                 if (!capture_in_progress) {
                     capture_in_progress = true;
                     capture(true).then(color => {
@@ -107,17 +109,29 @@ setTimeout(function () {
                 break;
 
             case states.ROTATE:
-                if (true && (saw_red || current_gen < 0)) {
+                //      Tent1
+                //
+                // 2 (1)     0 (-1)
+                //      1 (0)
+
+                if (current_gen < 0) {
                     console.log("\n\n\n!!! Moving into Room 1 !!!\n\n");
                     current_state = states.MOVE_ROOM_1;
-                }
-                else if (true && !saw_red) {
+                } else if (!rotated) {
+
+                    // Control: ...and rotate to the next generator
+                    rotated = !navigation.rotate90(current_gen);
+
+                } else if (rotated) {
+                    // Control: Done with rotating, continue with capturing
+                    rotated = false;
                     console.log("\n\n\n!!! Capturing Generator !!!\n\n");
                     current_state = states.CAPTURE;
                 }
                 break;
 
             case states.MOVE_ROOM_1:
+                // TODO DO SHIT
                 if (true) {
                     console.log("\n\n\n!!! Landing !!!\n\n");
                     current_state = states.LAND;
